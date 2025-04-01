@@ -12,7 +12,7 @@ const Auth = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password: "",
+    password: ""
   });
   const [errors, setErrors] = useState({});
 
@@ -55,18 +55,15 @@ const Auth = () => {
   const handleAuth = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     if (isForgotPassword) {
       alert("Password reset link sent to your email.");
       return;
     }
-
     if (isSignup) {
       alert("Account created successfully! Please login.");
       setIsSignup(false);
       return;
     }
-
     if (formData.email === "admin@techhaven.com") {
       localStorage.setItem("userRole", "admin");
       setUserRole("admin");
@@ -79,8 +76,8 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 shadow-lg rounded-lg w-96">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">
           {isForgotPassword ? "Reset Password" : isSignup ? "Sign Up" : "Login"}
         </h2>
@@ -101,22 +98,20 @@ const Auth = () => {
               )}
             </div>
           )}
-          {!isForgotPassword && (
-            <div className="relative">
-              <FaEnvelope className="absolute left-3 top-3 text-gray-500" />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full pl-10 p-2 border rounded focus:ring focus:ring-blue-300"
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
-              )}
-            </div>
-          )}
+          <div className="relative">
+            <FaEnvelope className="absolute left-3 top-3 text-gray-500" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="w-full pl-10 p-2 border rounded focus:ring focus:ring-blue-300"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
+          </div>
           {!isForgotPassword && (
             <div className="relative">
               <FaLock className="absolute left-3 top-3 text-gray-500" />
@@ -148,46 +143,34 @@ const Auth = () => {
             type="submit"
             className="w-full bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600"
           >
-            {isForgotPassword
-              ? "Send Reset Link"
-              : isSignup
-              ? "Sign Up"
-              : "Login"}
+            {isForgotPassword ? "Send Reset Link" : isSignup ? "Sign Up" : "Login"}
           </button>
         </form>
-        {!isForgotPassword ? (
-          <p className="text-center text-gray-600 mt-4">
-            {isSignup ? "Already have an account? " : "Don't have an account? "}
-            <span className="text-blue-500 cursor-pointer" onClick={toggleForm}>
-              {isSignup ? "Login" : "Sign Up"}
-            </span>
-          </p>
-        ) : (
+        {/* Forgot Password link */}
+        {!isForgotPassword && !isSignup && (
           <p
-            className="text-blue-500 text-center cursor-pointer mt-4"
-            onClick={() => setIsForgotPassword(false)}
-          >
-            Back to Login
-          </p>
-        )}
-        {!isForgotPassword && (
-          <p
-            className="text-blue-500 text-center cursor-pointer mt-2"
+            className="text-center text-blue-500 cursor-pointer mt-2"
             onClick={toggleForgotPassword}
           >
             Forgot Password?
           </p>
         )}
+        
+        <p className="text-center text-gray-600 mt-4">
+          {isSignup ? "Already have an account? " : "Don't have an account? "}
+          <span className="text-blue-500 cursor-pointer" onClick={toggleForm}>
+            {isSignup ? "Login" : "Sign Up"}
+          </span>
+        </p>
 
-        {/* Terms & Policies Section */}
-        <div className="text-center text-gray-500 text-sm mt-6 border-t pt-4">
-          By continuing, you agree to our{" "}
-          <span className="text-blue-600 cursor-pointer">
-            Terms & Conditions
-          </span>{" "}
-          and{" "}
-          <span className="text-blue-600 cursor-pointer">Privacy Policy</span>.
-        </div>
+        {/* Added Terms and Conditions Link */}
+        {!isForgotPassword && !isSignup && (
+          <p className="text-center text-sm text-gray-600 mt-4">
+            By continuing, you agree to our{" "}
+            <span className="text-blue-500 cursor-pointer">Terms and Conditions</span> and
+            <span className="text-blue-500 cursor-pointer"> Privacy Policy</span>.
+          </p>
+        )}
       </div>
     </div>
   );

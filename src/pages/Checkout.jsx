@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const { cartItems, placeOrder } = useAppContext();
+  const { cartItems, setCartItems } = useAppContext();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -12,6 +12,7 @@ const Checkout = () => {
     card: "",
     mobile: "",
   });
+
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   const handleChange = (e) => {
@@ -25,32 +26,42 @@ const Checkout = () => {
       return;
     }
 
-    placeOrder({
+    const existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
+    const newOrders = cartItems.map((item) => ({
+      id: `order-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      productId: item.id,
       name: form.name,
       shippingAddress: form.address,
       mobile: form.mobile,
-    });
+      total: item.price,
+      status: "Pending",
+      date: new Date().toISOString().split("T")[0],
+    }));
 
+    localStorage.setItem("orders", JSON.stringify([...existingOrders, ...newOrders]));
+    setCartItems([]);
     setOrderPlaced(true);
-    setTimeout(() => navigate("/myorders"), 2000);
   };
 
+  useEffect(() => {
+    if (orderPlaced) {
+      setTimeout(() => {
+        navigate("/myorders");
+      }, 2000);
+    }
+  }, [orderPlaced, navigate]);
+
   return (
-    <div className="container mx-auto p-4 max-w-lg">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">Checkout</h2>
+    <div className="container mx-auto px-4 py-6 sm:p-8 max-w-lg">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 text-center">Checkout</h2>
       {orderPlaced ? (
-        <div className="text-center text-green-600 text-xl font-semibold">
+        <div className="text-center text-green-600 text-lg sm:text-xl font-semibold">
           Order Placed Successfully! Redirecting...
         </div>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-6 shadow-md rounded-lg"
-        >
+        <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded-lg">
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">
-              Full Name
-            </label>
+            <label className="block text-gray-700 font-semibold">Full Name</label>
             <input
               type="text"
               name="name"
@@ -61,9 +72,7 @@ const Checkout = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">
-              Shipping Address
-            </label>
+            <label className="block text-gray-700 font-semibold">Shipping Address</label>
             <input
               type="text"
               name="address"
@@ -74,25 +83,18 @@ const Checkout = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">
-              Card Details
-            </label>
+            <label className="block text-gray-700 font-semibold">Card Details</label>
             <input
               type="text"
               name="card"
               value={form.card}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1 focus:ring focus:ring-yellow-300"
+              className="w-full p-2 border border-gray-300 rounded mt-1 focus:ring focus:ring-yellow-300 tracking-widest"
               required
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="mobile"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Mobile Number
-            </label>
+            <label className="block text-gray-700 font-semibold">Mobile Number</label>
             <input
               type="tel"
               name="mobile"

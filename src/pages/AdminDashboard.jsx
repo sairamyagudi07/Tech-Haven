@@ -59,8 +59,8 @@ const Dashboard = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-
-      <div className="grid grid-cols-4 gap-6 mt-6">
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
         {stats.map((stat, index) => (
           <div
             key={index}
@@ -69,45 +69,29 @@ const Dashboard = () => {
             <div className={`${stat.color} text-3xl`}>{stat.icon}</div>
             <div>
               <p className="text-gray-600 text-sm">{stat.title}</p>
-              <p className="text-xl font-semibold text-gray-800">
-                {stat.value}
-              </p>
+              <p className="text-xl font-semibold text-gray-800">{stat.value}</p>
             </div>
           </div>
         ))}
       </div>
-
-      <div className="grid grid-cols-2 gap-6 mt-6">
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Total Users
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Total Users</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={usersData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" stroke="#888" />
               <YAxis stroke="#888" />
               <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="users"
-                stroke="#FFD700"
-                strokeWidth={2}
-              />
-              <Line
-                type="monotone"
-                dataKey="newUsers"
-                stroke="#888"
-                strokeWidth={2}
-              />
+              <Line type="monotone" dataKey="users" stroke="#FFD700" strokeWidth={2} />
+              <Line type="monotone" dataKey="newUsers" stroke="#888" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </div>
-
+        
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Total Orders
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Total Orders</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={ordersData}>
               <CartesianGrid strokeDasharray="3 3" />

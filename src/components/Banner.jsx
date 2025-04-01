@@ -1,5 +1,4 @@
 import React from "react";
-
 const Banner = ({ imageUrl, title, subtitle }) => {
   return (
     <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden shadow-lg">
@@ -11,5 +10,4 @@ const Banner = ({ imageUrl, title, subtitle }) => {
     </div>
   );
 };
-
 export default Banner;
